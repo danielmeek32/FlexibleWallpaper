@@ -1,0 +1,19 @@
+<manifest package="daniel_32.flexiblewallpaper"
+		  xmlns:android="http://schemas.android.com/apk/res/android">
+	<uses-feature android:name="android.software.live_wallpaper"/>
+	<application android:allowBackup="true"
+				 android:icon="@mipmap/ic_launcher"
+				 android:label="@string/app_name">
+		<activity android:name=".FlexibleWallpaperSettingsActivity"
+				  android:exported="true"
+				  android:label="@string/app_name"/>
+		<service android:name=".FlexibleWallpaperService"
+				 android:permission="android.permission.BIND_WALLPAPER">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService"/>
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper"
+					   android:resource="@xml/wallpaper_service"/>
+		</service>
+	</application>
+</manifest>
