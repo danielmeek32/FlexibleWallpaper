@@ -68,14 +68,7 @@ public class FlexibleWallpaperService extends WallpaperService
 		public void onCreate(SurfaceHolder surfaceHolder)
 		{
 			super.onCreate(surfaceHolder);
-			try
-			{
-				this.imageOriginal = BitmapFactory.decodeFile(getFilesDir() + "/picture");
-			}
-			catch (Exception exception)
-			{
-				exception.printStackTrace();
-			}
+			load_image();
 			FlexibleWallpaperService.this.engines.add(this);
 		}
 
@@ -126,6 +119,24 @@ public class FlexibleWallpaperService extends WallpaperService
 			this.surfaceHolder = null;
 		}
 
+		private void load_image()
+		{
+			if (this.imageOriginal != null)
+			{
+				this.imageOriginal.recycle();
+				this.imageOriginal = null;
+			}
+
+			try
+			{
+				this.imageOriginal = BitmapFactory.decodeFile(getFilesDir() + "/picture");
+			}
+			catch (Exception exception)
+			{
+				exception.printStackTrace();
+			}
+		}
+
 		private void scale_image()
 		{
 			if (this.imageScaled != null)
@@ -136,6 +147,11 @@ public class FlexibleWallpaperService extends WallpaperService
 
 			if (this.imageOriginal != null)
 			{
+				if (this.imageOriginal.isRecycled())
+				{
+					load_image();
+				}
+
 				int width = (int) (((float) this.screenHeight / (float) this.imageOriginal.getHeight()) * this.imageOriginal.getWidth());
 				int height = this.screenHeight;
 				if (width < this.screenWidth)
@@ -166,6 +182,11 @@ public class FlexibleWallpaperService extends WallpaperService
 		{
 			if (this.surfaceHolder != null && this.imageScaled != null)
 			{
+				if (this.imageScaled.isRecycled())
+				{
+					scale_image();
+				}
+
 				Surface surface = this.surfaceHolder.getSurface();
 				Canvas canvas = surface.lockCanvas(this.surfaceHolder.getSurfaceFrame());
 				if (this.imageVertical)
@@ -182,19 +203,9 @@ public class FlexibleWallpaperService extends WallpaperService
 
 		private void onPictureChanged()
 		{
-			try
-			{
-				this.imageOriginal = BitmapFactory.decodeFile(getFilesDir() + "/picture");
-				if (this.imageScaled != null)
-				{
-					scale_image();
-					redraw();
-				}
-			}
-			catch (Exception exception)
-			{
-				exception.printStackTrace();
-			}
+			load_image();
+			scale_image();
+			redraw();
 		}
 	}
 }
