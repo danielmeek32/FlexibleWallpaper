@@ -1,5 +1,7 @@
 # Flexible Wallpaper
 
+**This repository is archived. Future development will take place at https://gitlab.com/danielmeek32/FlexibleWallpaper.**
+
 Use images with any aspect ratio as a wallpaper
 
 ## Description
